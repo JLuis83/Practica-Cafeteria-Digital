@@ -1,243 +1,178 @@
 import java.util.*;
-
+/*
+1 → Añadir pedido   (ArrayList y LinkedList)
+2 → Mostrar pedidos (ArrayList y LinkedList)
+3 → Mostrar menú (HashMap y TreeMap)
+4 → Atender siguiente pedido (elimina el primero de la LinkedList)
+*/
 
 public class CafeteriaDigital {
 
-    static String nombreCliente;
-    static String seleccionado;
+    private String nombreCliente;
+    private String seleccionado;
 
 
-    public static class datos {
-        public static Scanner sc = new Scanner(System.in);
-        public static ArrayList<String> arrayPedido = new ArrayList<>();
-        public static ArrayList<String> arrayProductos = new ArrayList<>();
-        public static HashMap<String,Double> productos = new HashMap<>();
+    public static Scanner sc;
+    //Menu Desordenado
+    public static HashMap<String, Double> productosDesordenados;
 
+    //Menu Ordenado
+    public static TreeMap<String, Double> productosOrdenados;
+
+    //Pedido
+    public static ArrayList<String>pedidos;
+
+
+    //Mostrar Pedidos
+    //public static ArrayList<String,Double> arrayPedido;
+    //private static ArrayList<String,Double> arrayPedido;
+
+
+    public CafeteriaDigital() {  //los metodos relacionados con el constructor no pueden estar static
+
+        //this.arrayPedido = new ArrayList<>();
+        this.sc = new Scanner(System.in);
+        this.productosDesordenados = new HashMap<>();
+        this.productosOrdenados = new TreeMap<>();
+        this.pedidos= new ArrayList<>();
+        cargarProductos();
     }
+
 
     public static void main(String[] args) {
 
-        menuPrincipal();
+      // new CafeteriaDigital().ejecutar();
 
+       CafeteriaDigital cafet = new CafeteriaDigital();
+       cafet.ejecutar();
+    }
+
+    private void ejecutar() {
+        int opcion;
+        do {
+            opcion = mostrarMenuPrincipal();
+            procesarOpcion(opcion);
+        } while (opcion != 0);
+
+        cerrarRecurso();
     }
 
 
-    public static void menuPrincipal() {
+    public  int mostrarMenuPrincipal() {
 
         int opcion;
 
         System.out.println("Menu Cafeteria");
-        System.out.println("1-Añadir pedido Array");
-        System.out.println("2-Añadir pedido Hasmap");
-        System.out.println("3-Mostrar pedido");
-        System.out.println("4-Mostrar menú");
-        System.out.println("5-Siguiente pedido");
-        System.out.println("6-Volver al Menú principal");
+        System.out.println("1-Mostrar menú");
+        System.out.println("2-Añadir Pedido");
+        System.out.println("4-Siguiente Pedido");
         System.out.println("0-Salir");
         System.out.println("Elige una opcion");
 
+        opcion = leerEntero();
+        sc.nextLine();
+        return opcion;
 
-        do {
-            opcion = datos.sc.nextInt();
-            datos.sc.nextLine();
+    }
 
-            switch (opcion) {
-                case 1 -> anadirPedidoAr();
-                case 2 -> anadirPedidoHas();
-                case 3 -> mostrarPedido();
-                case 4 -> mostrarProductos();
-                case 5 -> System.out.println("Siguiente pedido");
-                case 6 -> menuPrincipal();
-                case 0 -> System.out.println("Saliendo....");
-                default -> System.out.println("Opcion no valida");
+    private void procesarOpcion(int opcion) {
+
+            switch(opcion){
+                case 1->{
+                    menu();
+                    System.out.println("\nPulsa ENTER para volver al menú principal...");
+                    sc.nextLine(); // limpiar buffer
+                }
+                case 2 ->pedido();
+                //case 0 -> System.out.println("Salir");
+                //default -> System.out.println("saliendo");
             }
-        } while (opcion != 0);
+
+    }
+
+    private void cerrarRecurso(){
+
+        CafeteriaDigital.sc.close();
+    }
+    public void cargarProductos() {
+
+
+
+        productosDesordenados.put("Cafe", 1.20);
+        productosDesordenados.put("Donuts", 2.0);
+        productosDesordenados.put("Té", 1.50);
+        productosDesordenados.put("Tostadas", 2.50);
+        productosDesordenados.put("Churros", 2.00);
+        productosDesordenados.put("Te verde", 1.20);
+        productosDesordenados.put("Mermelada", 1.50);
+        productosDesordenados.put("Leche", 1.0);
+        productosDesordenados.put("Cereales", 1.30);
+
+
+        productosOrdenados.putAll(productosDesordenados);
 
     }
 
 
-    public static void anadirPedidoHas() {
-        // Cuando añado 2 pedidos con nombres diferentes, no los separa
+    private int leerEntero(){
+        while (!sc.hasNextInt()) {
+            System.out.println("Introduce un número valido");
+            sc.next();
 
-        System.out.println("Introduce tu nombre: ");
-        nombreCliente = datos.sc.nextLine();
-
-        while (nombreCliente.matches("[a-zA-Z]")) {
-            System.out.println("Su nombre  no es correcto");
-            nombreCliente =datos.sc.nextLine();
         }
-            System.out.println(" Su nombre es correcto");
-
-        if(datos.productos.isEmpty()) {
-            datos.productos.put("cafe", 1.20);
-            datos.productos.put("Donuts", 2.00);
-            datos.productos.put("Té", 1.50);
-            datos.productos.put("Tostadas", 1.70);
-            datos.productos.put("Churros", 2.50);
-            datos.productos.put("Té Verde", 1.30);
-            datos.productos.put("Mermelada", 1.60);
-            datos.productos.put("Leche", 1.80);
-            datos.productos.put("Cereales", 1.70);
-        }
-
-        System.out.println("Mostrar Menú (0 para terminar de pedir)");
-        System.out.println("=======================================");
-
-
-        datos.productos.forEach((producto, precio) ->
-        System.out.println(producto + " -" + precio + "€"));
-
-        System.out.println("Elige tu menú");
-        String  desayuno = datos.sc.nextLine();
-        datos.sc.nextLine();
-        menuPrincipal();
-
-        /*CHATGPT ?¿?¿?
-        for (int i = 0; i < productos.size(); i++) {
-            String producto = productos.get(i);
-            System.out.println((i + 1) + " - " + producto + " (" + productos.get(producto) + "€)");
-        }*/
+        return sc.nextInt();
 
     }
 
 
-    public static void anadirPedidoAr(){
 
-        System.out.println("Mostrar Menú (0 para terminar de pedir)");
-        System.out.println("=======================================");
-        if(datos.arrayProductos.isEmpty())
-        datos.arrayProductos.add("Cafe");
-        datos.arrayProductos.add("Cafe");
-        datos.arrayProductos.add("Donuts");
-        datos.arrayProductos.add("Té");
-        datos.arrayProductos.add("Tostadas");
-        datos.arrayProductos.add("Churros");
-        datos.arrayProductos.add("Te verde");
-        datos.arrayProductos.add("Mermelada");
-        datos.arrayProductos.add("Leche");
-        datos.arrayProductos.add("Cereales");
+    private static void menu() {
 
-        int desayuno;
+        System.out.println("Productos Desordenados");
+        System.out.println("______________________");
 
-        do {
-            for (int i = 0; i < datos.arrayProductos.size(); i++) {
-                System.out.println((i + 1) + "-" + datos.arrayProductos.get(i));
-            }
+       productosDesordenados.forEach((producto, precio) ->
+                System.out.println(producto + " = " + precio + "€"));
+
+        System.out.println("\nProductos Ordenados");
+        System.out.println("______________________");
+
+            productosOrdenados.forEach((producto, precio) ->
+                    System.out.println(producto + " = " + precio + "€"));
 
 
-            System.out.println("Elige tu menú");
-            desayuno = datos.sc.nextInt();
-            datos.sc.nextLine();
 
-            //chatgpt
-            if (desayuno > 0 && desayuno <= datos.arrayProductos.size()) {
-                String elegido = datos.arrayProductos.get(desayuno - 1);
-                datos.arrayPedido.add(elegido);
-                System.out.println("Añadido: " + elegido);
-            } else if (desayuno != 0) {
-                System.out.println("No valido");
 
-            }
-        } while (desayuno != 0);
-
-        System.out.println("\nPEDIDO FINAL:");
-        System.out.println("El cliente " + nombreCliente + " ha seleccionado:");
-        datos.arrayPedido.forEach(seleccionado -> System.out.println("- " + seleccionado));//chatgpt
-
-        System.out.println("Pulsa Enter para continuar");
-        datos.sc.nextLine();
-        menuPrincipal();
-        return;
-    }
-
-    public static void mostrarPedido() {
 
 
     }
 
+    private void pedido(){
 
-       /* System.out.println("Pedidos en curso");
-        System.out.println("================");
-        System.out.println("El cliente " + nombreCliente + " ha seleccionado  " + datos.arrayPedido);*/
-
-
-
-    public static void mostrarProductos() {
+        System.out.println("Nombre Cliente");
+        String nombre = sc.nextLine();
 
 
-        System.out.println("Mostrar Menu (Pulsa 0 para salir)");
-        System.out.println("=================================");
-        System.out.println("Cafe - 1,20");
-        System.out.println("Donuts - 2,00");
-        System.out.println("Té - 1,50");
-        System.out.println("Tostadas - 1,70");
-        System.out.println("Churros - 2,50");
-        System.out.println("Te verde - 1,30");
-        System.out.println("Mermelada - 1,60");
-        System.out.println("Leche - 1,80");
-        System.out.println("Cereales - 1,70");
-        System.out.println("=================================");
-        System.out.println("Pulsa 5 para volver al menú principal");
+        System.out.println("Producto: ");
+        String producto = sc.nextLine();
 
 
     }
 
 }
 
-/* public static void anadirPedidolink() {
-System.out.println("Introduce tu nombre: ");
-        nombreCliente = datos.sc.nextLine();
-
-        if(nombreCliente.matches("[a-zA-Z]+")){
-            System.out.println("Su nombre es correcto");
-        }else {
-            System.out.println("Por favor  vuelva a introducir su nombre");
-        }
 
 
-        System.out.println("Mostrar Menú (0 para terminar de pedir)");
-        System.out.println("=======================================");
-        datos.linkProductos.add("Cafe");
-        datos.linkProductos.add("Cafe");
-        datos.linkProductos.add("Donuts");
-        datos.linkProductos.add("Té");
-        datos.linkProductos.add("Tostadas");
-        datos.linkProductos.add("Churros");
-        datos.linkProductos.add("Te verde");
-        datos.linkProductos.add("Mermelada");
-        datos.linkProductos.add("Leche");
-        datos.linkProductos.add("Cereales");
-
-        int desayuno;
-
-        do {
-            for (int i = 0; i < datos.linkProductos.size(); i++) {
-                System.out.println((i + 1) + "-" + datos.linkProductos.get(i));
-            }
 
 
-            System.out.println("Elige tu menú");
-            desayuno = datos.sc.nextInt();
-            datos.sc.nextLine();
 
-            //chatgpt
-            if (desayuno > 0 && desayuno <= datos.linkProductos.size()) {
-                String elegido = datos.linkProductos.get(desayuno - 1);
-                datos.linkProductos.add(elegido);
-                System.out.println("Añadido: " + elegido);
-            } else if (desayuno != 0) {
-                System.out.println("No valido");
 
-            }
-        } while (desayuno != 0);
+/*
+Tiene  nombre las columnas de las tablas??
+pdf Pedro
+como se pasa al pedido que es un array
 
-        System.out.println("\nPEDIDO FINAL:");
-        System.out.println("El cliente " + nombreCliente + " ha seleccionado:");
-        datos.linkProductos.forEach(seleccionado -> System.out.println("- " + seleccionado));//chatgpt
 
-        System.out.println("Pulsa Enter para continuar");
-        datos.sc.nextLine();
-        menuPrincipal();
-        return;
-    }
-* */
+Hodl Hodl
+
+ */
