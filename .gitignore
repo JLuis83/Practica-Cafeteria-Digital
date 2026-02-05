@@ -1,0 +1,83 @@
+# =========================
+# Java - compilados
+# =========================
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Carpetas de build
+# =========================
+/target/
+/build/
+/out/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Archivos temporales
+# =========================
+*.tmp
+*.temp
+*.swp
+*~
+
+# =========================
+# IDEs
+# =========================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# =========================
+# Sistema operativo
+# =========================
+
+# Linux
+*~
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# =========================
+# Dependencias descargadas
+# =========================
+.gradle/
+.mvn/
+
+# =========================
+# Archivos sensibles
+# =========================
+*.env
+*.key
+*.pem
+*.crt
+
+# =========================
+# Fotografías / Imágenes
+# =========================
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.heic
