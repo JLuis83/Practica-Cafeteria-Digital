@@ -114,6 +114,8 @@ public class CafeteriaDigital {
     }
 
 
+
+
     private int leerEntero() {
         while (!sc.hasNextInt()) {
             System.out.println("Introduce un número valido");
@@ -163,6 +165,7 @@ public class CafeteriaDigital {
 
 
         nombreCliente = pedirNombreCliente();
+
         // varible que almacena el listado de productos elegidos por el cliente
         ArrayList<String> productos = solicitarProductos();
 
@@ -171,6 +174,9 @@ public class CafeteriaDigital {
             System.out.println("No se han añadido productos");
             return;
         }
+
+
+
 
         // Asigna el nombre del cliente con los productos elegidos
         String pedido= construirPedido(nombreCliente,productos);
@@ -219,8 +225,12 @@ public class CafeteriaDigital {
     }
 
     public String capturaProducto () {
-            System.out.println("Introduce un producto del menu (o fin para acabar)");
-            return sc.nextLine().trim();
+
+     
+
+        System.out.println("Introduce un producto del menu (o fin para acabar)");
+
+        return sc.nextLine().trim();
     }
 
 
